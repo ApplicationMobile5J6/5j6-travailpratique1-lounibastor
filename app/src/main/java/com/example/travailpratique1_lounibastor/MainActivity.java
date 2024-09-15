@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         spn_nomResto = (Spinner) findViewById(R.id.spn_nomResto);
         tv_placesRestantes = (TextView) findViewById(R.id.tv_placesReserve);
+
     }
 
     public void onClick_reserverTable(View view) {
