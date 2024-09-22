@@ -3,10 +3,12 @@ package com.example.travailpratique1_lounibastor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Spinner spn_nomResto;
     private TextView tv_placesRestantes;
-
-
+    ArrayList<restaurant> listeRestaurants= new ArrayList<>();
+    private restaurant restaurantSelectionne;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +50,29 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<restaurant> adaptateur = new ArrayAdapter<restaurant>(this, android.R.layout.simple_spinner_item,listeRestaurants);
         adaptateur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn_nomResto.setAdapter(adaptateur);
+
+        spn_nomResto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                restaurantSelectionne = (restaurant) spn_nomResto.getSelectedItem();
+                Toast.makeText(parent.getContext(),"Selection:   " + restaurantSelectionne,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void onClick_reserverTable(View view) {
         Intent monIntent =  new Intent(MainActivity.this, ReservationActivity.class);
+        Bundle bReservation = new Bundle();
+        bReservation.putParcelableArrayList("ARRAYLIST",listeRestaurants);
+        monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
+        monIntent.putExtra("PlacesRestantes", restaurantSelectionne.getNbPlacesRestantes());
         monIntent.putExtra("Places restantes", tv_placesRestantes.getText().toString());
+        monIntent.putExtras(bReservation);
         startActivity(monIntent);
     }
 }

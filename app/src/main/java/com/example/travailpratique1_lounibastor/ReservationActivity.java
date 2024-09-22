@@ -17,7 +17,7 @@ public class ReservationActivity extends AppCompatActivity {
     private TextView tv_placesRestantes;
     private SeekBar sb_placeRes;
     private TextView tv_placesReserve;
-
+    private TextView tv_nomResto;
     private static int VALEUR = 5;
 
     @Override
@@ -36,13 +36,18 @@ public class ReservationActivity extends AppCompatActivity {
         tv_placesReserve = findViewById(R.id.tv_placesReserve);
         sb_placeRes = findViewById(R.id.sb_placesRes);
         tv_placesRestantes = findViewById(R.id.tv_placesRestantes);
-
+        tv_nomResto = findViewById(R.id.tv_nomResto);
         tv_placesRestantes.setText(msg);
 
         sb_placeRes.setMax(10);
         sb_placeRes.setProgress(1);
 
         tv_placesReserve.setText(sb_placeRes.getProgress() + " places reservées");
+        Intent intent = getIntent();
+        Bundle bReservation = intent.getExtras();
+        String nomResto = intent.getStringExtra("NomResto");
+        tv_nomResto.setText(nomResto);
+
 
         sb_placeRes.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progression = 0;
