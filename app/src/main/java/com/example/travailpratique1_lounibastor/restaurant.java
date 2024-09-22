@@ -78,6 +78,6 @@ public class restaurant implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return super.toString();
+        return nomRestaurant;
     }
 }
