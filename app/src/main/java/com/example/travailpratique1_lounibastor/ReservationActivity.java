@@ -1,8 +1,15 @@
 package com.example.travailpratique1_lounibastor;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.SeekBar;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,13 +19,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class ReservationActivity extends AppCompatActivity {
 
-    private TextView tv_placesRestantes;
+    private TextView tv_placesRestantes, tv_placesReserve, et_date, tv_nomResto;
     private SeekBar sb_placeRes;
-    private TextView tv_placesReserve;
-    private TextView tv_nomResto;
     private static int VALEUR = 5;
+    private SimpleDateFormat dateFormater, heureFormater;
+    private Spinner spn_heureDebut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +45,43 @@ public class ReservationActivity extends AppCompatActivity {
             return insets;
         });
 
+        et_date = findViewById(R.id.et_date);
         tv_placesReserve = findViewById(R.id.tv_placesReserve);
         sb_placeRes = findViewById(R.id.sb_placesRes);
         tv_placesRestantes = findViewById(R.id.tv_placesRestantes);
         tv_nomResto = findViewById(R.id.tv_nomResto);
         tv_placesRestantes.setText(msg);
+        spn_heureDebut = findViewById(R.id.spn_heureDebut);
+        ArrayList<String> listHeure = new ArrayList<>();
+        listHeure.add("16:00");
+        listHeure.add("17:30");
+        listHeure.add("19:00");
+        listHeure.add("20:30");
+        listHeure.add("22:00");
+
+        ArrayAdapter<String> adaptateur = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listHeure);
+
+        adaptateur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spn_heureDebut.setAdapter(adaptateur);
+        et_date.setInputType(InputType.TYPE_NULL);
+        dateFormater = new SimpleDateFormat("yyyy-MM--dd", Locale.CANADA_FRENCH);
+
+        et_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+
+                DatePickerDialog calendrier = new DatePickerDialog(ReservationActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                        Calendar nouvelleDate = Calendar.getInstance();
+                        nouvelleDate.set(year, month, dayOfMonth);
+                        et_date.setText(dateFormater.format(nouvelleDate.getTime()));
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                calendrier.show();
+            }
+        });
 
         sb_placeRes.setMax(10);
         sb_placeRes.setProgress(1);
