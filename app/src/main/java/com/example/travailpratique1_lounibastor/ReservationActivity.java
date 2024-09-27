@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.SeekBar;
@@ -26,7 +27,7 @@ import java.util.Locale;
 
 public class ReservationActivity extends AppCompatActivity {
 
-    private TextView tv_placesRestantes, tv_placesReserve, et_date, tv_nomResto;
+    private TextView tv_placesRestantes, tv_placesReserve, et_date, tv_nomResto, et_heureFin;
     private SeekBar sb_placeRes;
     private static int VALEUR = 5;
     private SimpleDateFormat dateFormater, heureFormater;
@@ -52,6 +53,7 @@ public class ReservationActivity extends AppCompatActivity {
         tv_nomResto = findViewById(R.id.tv_nomResto);
         tv_placesRestantes.setText(msg);
         spn_heureDebut = findViewById(R.id.spn_heureDebut);
+        et_heureFin = findViewById(R.id.et_heureFin);
         ArrayList<String> listHeure = new ArrayList<>();
         listHeure.add("16:00");
         listHeure.add("17:30");
@@ -80,6 +82,19 @@ public class ReservationActivity extends AppCompatActivity {
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                 calendrier.show();
+            }
+        });
+
+        spn_heureDebut.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedTime = (String) parent.getItemAtPosition(position);
+                updateHeureFin(selectedTime);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Aucune action nécessaire
             }
         });
 
@@ -113,5 +128,27 @@ public class ReservationActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private void updateHeureFin(String heureDebut) {
+        String[] parts = heureDebut.split(":");
+        int heure = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+
+        // Ajouter 1 heure et 30 minutes
+        minute += 30;
+        if (minute >= 60) {
+            minute -= 60;
+            heure++;
+        }
+        heure += 1; // Ajouter 1 heure
+
+        // Gérer l'heure au-delà de 23
+        if (heure >= 24) {
+            heure -= 24;
+        }
+
+        // Formatage de l'heure de fin
+        String formattedHeureFin = String.format(Locale.CANADA_FRENCH, "%02d:%02d", heure, minute);
+        et_heureFin.setText(formattedHeureFin);
     }
 }
