@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_placesRestantes;
     ArrayList<restaurant> listeRestaurants= new ArrayList<>();
     private restaurant restaurantSelectionne;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
         monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
         monIntent.putExtra("PlacesRestantes", String.valueOf(restaurantSelectionne.getNbPlacesRestantes()));
         monIntent.putExtras(bReservation);
+        startActivity(monIntent);
+    }
+
+    public void onClick_AfficherReservation(View view) {
+        Intent monIntent =  new Intent(MainActivity.this, RestaurantActivity.class);
+        Bundle bReservation = new Bundle();
+        bReservation.putParcelableArrayList("ARRAYLIST",listeRestaurants);
+        monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
         startActivity(monIntent);
     }
 }
