@@ -126,17 +126,14 @@ public class ReservationActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
                 progression = progressValue;
                 tv_placesReserve.setText(progressValue + " places reservées" );
-                Toast.makeText(getApplicationContext(), "Modification", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "Démarrage", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "Fin", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -147,7 +144,7 @@ public class ReservationActivity extends AppCompatActivity {
         int minute = Integer.parseInt(parts[1]);
 
         // Ajouter 1 heure et 30 minutes
-        minute += 30;
+        minute += 29;
         if (minute >= 60) {
             minute -= 60;
             heure++;
@@ -162,5 +159,9 @@ public class ReservationActivity extends AppCompatActivity {
         // Formatage de l'heure de fin
         String formattedHeureFin = String.format(Locale.CANADA_FRENCH, "%02d:%02d", heure, minute);
         et_heureFin.setText(formattedHeureFin);
+    }
+
+    public void onClick_ReserverTable(View view) {
+
     }
 }
