@@ -2,6 +2,7 @@ package com.example.travailpratique1_lounibastor;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -106,6 +107,17 @@ public class ReservationActivity extends AppCompatActivity {
         Bundle bReservation = intent.getExtras();
         String nomResto = intent.getStringExtra("NomResto");
         tv_nomResto.setText(nomResto);
+        String placeRestante = intent.getStringExtra("PlacesRestantes");
+        tv_placesRestantes.setText(placeRestante + " places restantes");
+
+        int nbPlacesRestantes = Integer.parseInt(placeRestante);
+
+// Vérifier si le nombre de places restantes est inférieur ou égal à 4
+        if (nbPlacesRestantes <= 4) {
+            tv_placesRestantes.setTextColor(Color.RED); // Changer la couleur du texte en rouge
+        } else {
+            tv_placesRestantes.setTextColor(Color.GRAY); // Optionnel : changer la couleur si supérieur à 4
+        }
 
 
         sb_placeRes.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

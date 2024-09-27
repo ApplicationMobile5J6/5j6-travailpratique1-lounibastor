@@ -1,6 +1,7 @@
 package com.example.travailpratique1_lounibastor;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<restaurant> listeRestaurants= new ArrayList<>();
         listeRestaurants.add(new restaurant(1,"Bnine",15,15));
         listeRestaurants.add(new restaurant(2,"CHEZ RAMS",10,10));
-        listeRestaurants.add(new restaurant(3,"McHalal",9,9));
+        listeRestaurants.add(new restaurant(3,"McHalal",9,4));
         listeRestaurants.add(new restaurant(4,"Tacos del caso",20,20));
         listeRestaurants.add(new restaurant(1,"Fruit el Goju",35,35));
         ArrayAdapter<restaurant> adaptateur = new ArrayAdapter<restaurant>(this, android.R.layout.simple_spinner_item,listeRestaurants);
@@ -55,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 restaurantSelectionne = (restaurant) spn_nomResto.getSelectedItem();
+                if(restaurantSelectionne.getNbPlacesRestantes() <= 4){
+                    tv_placesRestantes.setTextColor(ContextCompat.getColor(MainActivity.this,
+                            R.color.rouge));
+                } else{
+                    tv_placesRestantes.setTextColor(Color.GRAY);
+                }
+                tv_placesRestantes.setText(String.valueOf(restaurantSelectionne.getNbPlacesRestantes()) + " places restantes");
                 Toast.makeText(parent.getContext(),"Selection:   " + restaurantSelectionne,Toast.LENGTH_LONG).show();
             }
 
@@ -65,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void onClick_reserverTable(View view) {
         Intent monIntent =  new Intent(MainActivity.this, ReservationActivity.class);
         Bundle bReservation = new Bundle();
         bReservation.putParcelableArrayList("ARRAYLIST",listeRestaurants);
         monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
-        monIntent.putExtra("PlacesRestantes", restaurantSelectionne.getNbPlacesRestantes());
-        monIntent.putExtra("Places restantes", tv_placesRestantes.getText().toString());
+        monIntent.putExtra("PlacesRestantes", String.valueOf(restaurantSelectionne.getNbPlacesRestantes()));
         monIntent.putExtras(bReservation);
         startActivity(monIntent);
     }
