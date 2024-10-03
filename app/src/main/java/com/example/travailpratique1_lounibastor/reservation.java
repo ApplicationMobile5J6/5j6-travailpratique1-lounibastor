@@ -4,8 +4,16 @@ import java.util.Date;
 
 public class reservation {
 
-    private int noReservation;
-    private String dateReservation;
+    private int noReservation, nbPlace;
+    private String dateReservation, blocReservationDebut, blocReservationFin, nomPersonne, telPersonne;
+
+    public reservation(String nomPersonne, String blocReservationDebut, String blocReservationFin, int nbPlace, String dateReservation) {
+        this.nomPersonne = nomPersonne;
+        this.blocReservationDebut = blocReservationDebut;
+        this.blocReservationFin = blocReservationFin;
+        this.nbPlace = nbPlace;
+        this.dateReservation = dateReservation;
+    }
 
     public int getNoReservation() {
         return noReservation;
@@ -63,10 +71,6 @@ public class reservation {
         this.telPersonne = telPersonne;
     }
 
-    private int nbPlace;
-    private String blocReservationDebut;
-    private String blocReservationFin;
-    private String nomPersonne;
-    private String telPersonne;
+
 
 }
