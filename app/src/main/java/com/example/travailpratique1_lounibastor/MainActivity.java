@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_placesRestantes;
     ArrayList<restaurant> listeRestaurants= new ArrayList<>();
     private restaurant restaurantSelectionne;
-
+    private ActivityResultLauncher<Intent> activityResultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,19 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        // Initialisation du ActivityResultLauncher
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    int nouvellesPlacesRestantes = data.getIntExtra("NouvellesPlacesRestantes", -1);
+                    if (nouvellesPlacesRestantes != -1) {
+                        restaurantSelectionne.setNbPlacesRestantes(nouvellesPlacesRestantes);
+                        tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
+                    }
+                }
+            }
+        });
     }
 
 
@@ -83,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
         monIntent.putExtra("PlacesRestantes", String.valueOf(restaurantSelectionne.getNbPlacesRestantes()));
         monIntent.putExtras(bReservation);
-        startActivity(monIntent);
+        activityResultLauncher.launch(monIntent);
     }
 
     public void onClick_AfficherReservation(View view) {
@@ -92,5 +107,7 @@ public class MainActivity extends AppCompatActivity {
         bReservation.putParcelableArrayList("ARRAYLIST",listeRestaurants);
         monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
         startActivity(monIntent);
+
     }
+
 }

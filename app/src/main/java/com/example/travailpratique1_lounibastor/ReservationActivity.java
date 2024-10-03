@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,11 +29,14 @@ import java.util.Locale;
 
 public class ReservationActivity extends AppCompatActivity {
 
-    private TextView tv_placesRestantes, tv_placesReserve, et_date, tv_nomResto, et_heureFin;
+    private TextView tv_placesRestantes, tv_placesReserve, et_date, tv_nomResto, et_heureFin,et_nomPersonne, et_telPersonne;
     private SeekBar sb_placeRes;
     private static int VALEUR = 5;
     private SimpleDateFormat dateFormater, heureFormater;
     private Spinner spn_heureDebut;
+    private ArrayList<reservation> listeReservations= new ArrayList<reservation>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class ReservationActivity extends AppCompatActivity {
         tv_placesRestantes.setText(msg);
         spn_heureDebut = findViewById(R.id.spn_heureDebut);
         et_heureFin = findViewById(R.id.et_heureFin);
+        et_nomPersonne = findViewById(R.id.et_nom);
+        et_telPersonne =findViewById(R.id.et_numeroTel);
+
         ArrayList<String> listHeure = new ArrayList<>();
         listHeure.add("16:00");
         listHeure.add("17:30");
@@ -162,6 +169,73 @@ public class ReservationActivity extends AppCompatActivity {
     }
 
     public void onClick_ReserverTable(View view) {
+        String nomPersonne = et_nomPersonne.getText().toString().trim();
+        String telPersonne = et_telPersonne.getText().toString().trim();
+        String dateReservation = et_date.getText().toString().trim();
+        String heureDebut = spn_heureDebut.getSelectedItem().toString();
+        int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
+        int placesReservees = sb_placeRes.getProgress();
 
+        // Validation des champs
+        if (nomPersonne.isEmpty() || telPersonne.isEmpty() || dateReservation.isEmpty() || heureDebut.isEmpty()) {
+            Toast.makeText(this, "Veuillez remplir tous les champs.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Vérification des places restantes
+        if (placesReservees > nbPlacesRestantes) {
+            Toast.makeText(this, "Pas assez de places disponibles.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        int nouvellesPlacesRestantes = nbPlacesRestantes - placesReservees;
+
+        tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
+
+        // Créer une nouvelle réservation
+        reservation nouvelleReservation = new reservation();
+
+        nouvelleReservation.setNoReservation(listeReservations.size() + 1);
+        nouvelleReservation.setDateReservation(dateReservation);
+        nouvelleReservation.setNbPlace(placesReservees);
+        nouvelleReservation.setBlocReservationDebut(heureDebut);
+        nouvelleReservation.setBlocReservationFin(et_heureFin.getText().toString());
+        nouvelleReservation.setNomPersonne(nomPersonne);
+        nouvelleReservation.setTelPersonne(telPersonne);
+
+        // Ajouter la réservation à la liste
+        listeReservations.add(nouvelleReservation);
+
+
+        Toast.makeText(this, "Réservation sauvegardée.", Toast.LENGTH_LONG).show();
+        et_nomPersonne.setText("");
+        et_telPersonne.setText("");
+        et_date.setText("");
+        sb_placeRes.setProgress(1);
+
+        Log.d("Reservation", "Réservation #" + nouvelleReservation.getNoReservation() +
+                " - Places: " + placesReservees +
+                " - Date: " + nouvelleReservation.getDateReservation() +
+                " - Heure de début: " + heureDebut);
+
+        // Retourner à MainActivity avec les nouvelles places restantes
+        /*Intent retourIntent = new Intent();
+        retourIntent.putExtra("NouvellesPlacesRestantes", nouvellesPlacesRestantes);
+        setResult(RESULT_OK, retourIntent);
+        finish();*/
+
+    }@Override
+    public void onBackPressed() {
+        // Récupérer le nombre de places restantes après la réservation
+        super.onBackPressed();
+        int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
+
+        // Retourner à MainActivity avec les nouvelles places restantes
+        Intent retourIntent = new Intent();
+        retourIntent.putExtra("NouvellesPlacesRestantes", nbPlacesRestantes);
+        setResult(RESULT_OK, retourIntent);
+
+        // Appeler finish() pour fermer l'activité et revenir à la précédente
+        finish();
     }
+
 }
