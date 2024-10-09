@@ -44,7 +44,7 @@ public class ReservationAdapt extends BaseAdapter {
         tv_nom.setText(this.getItem(position).getNomPersonne());
 
         tv_placesRes = view.findViewById(R.id.tv_nbPlaces);
-        tv_placesRes.setText(String.valueOf(this.getItem(position).getNbPlace()));
+        tv_placesRes.setText(String.valueOf(this.getItem(position).getNbPlace()) + " places");
 
         tv_heureDebut = view.findViewById(R.id.tv_heureDebut);
         tv_heureDebut.setText(this.getItem(position).getBlocReservationDebut());

@@ -192,7 +192,7 @@ public class ReservationActivity extends AppCompatActivity {
         tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
 
         // Créer une nouvelle réservation
-        reservation nouvelleReservation = new reservation();
+        reservation nouvelleReservation = new reservation("Amine Re", "17h00", "22h00", 2, "test", "2");
 
         nouvelleReservation.setNoReservation(listeReservations.size() + 1);
         nouvelleReservation.setDateReservation(dateReservation);
