@@ -28,10 +28,11 @@
             android:id="@+id/tv_titre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_gravity="center"
-            android:text="ReservoTable" />
+            android:text="ReservoTable"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
@@ -52,7 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="x places restantes" />
+            android:text="x places restantes"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btn_reserverTable"
@@ -60,14 +62,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:onClick="onClick_reserverTable"
-            android:text="RÉSERVER UNE TABLE" />
+            android:text="RÉSERVER UNE TABLE"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btn_afficherReserv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick_AfficherReservation"
-            android:text="AFFICHER LES RÉSERVATIONS" />
+            android:text="AFFICHER LES RÉSERVATIONS"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

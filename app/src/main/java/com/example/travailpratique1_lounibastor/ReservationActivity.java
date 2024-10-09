@@ -34,7 +34,7 @@ public class ReservationActivity extends AppCompatActivity {
     private static int VALEUR = 5;
     private SimpleDateFormat dateFormater, heureFormater;
     private Spinner spn_heureDebut;
-    private ArrayList<reservation> listeReservations= new ArrayList<reservation>();
+    private ArrayList<reservation> reservationListe = new ArrayList<reservation>();
 
 
 
@@ -173,6 +173,7 @@ public class ReservationActivity extends AppCompatActivity {
         String telPersonne = et_telPersonne.getText().toString().trim();
         String dateReservation = et_date.getText().toString().trim();
         String heureDebut = spn_heureDebut.getSelectedItem().toString();
+        String heureFin = et_heureFin.getText().toString();
         int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
         int placesReservees = sb_placeRes.getProgress();
 
@@ -187,26 +188,18 @@ public class ReservationActivity extends AppCompatActivity {
             Toast.makeText(this, "Pas assez de places disponibles.", Toast.LENGTH_LONG).show();
             return;
         }
-        int nouvellesPlacesRestantes = nbPlacesRestantes - placesReservees;
-
-        tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
-
-        // Créer une nouvelle réservation
-        reservation nouvelleReservation = new reservation("Amine Re", "17h00", "22h00", 2, "test", "2");
-
-        nouvelleReservation.setNoReservation(listeReservations.size() + 1);
-        nouvelleReservation.setDateReservation(dateReservation);
-        nouvelleReservation.setNbPlace(placesReservees);
-        nouvelleReservation.setBlocReservationDebut(heureDebut);
-        nouvelleReservation.setBlocReservationFin(et_heureFin.getText().toString());
-        nouvelleReservation.setNomPersonne(nomPersonne);
-        nouvelleReservation.setTelPersonne(telPersonne);
+        reservation nouvelleReservation = new reservation(nomPersonne, heureDebut, heureFin, placesReservees, dateReservation, telPersonne);
 
         // Ajouter la réservation à la liste
-        listeReservations.add(nouvelleReservation);
+        reservationListe.add(nouvelleReservation);
 
+        // Mettre à jour le nombre de places restantes
+        int nouvellesPlacesRestantes = nbPlacesRestantes - placesReservees;
+        tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
 
+        // Afficher un message de confirmation
         Toast.makeText(this, "Réservation sauvegardée.", Toast.LENGTH_LONG).show();
+
         et_nomPersonne.setText("");
         et_telPersonne.setText("");
         et_date.setText("");
@@ -214,8 +207,13 @@ public class ReservationActivity extends AppCompatActivity {
 
         Log.d("Reservation", "Réservation #" + nouvelleReservation.getNoReservation() +
                 " - Places: " + placesReservees +
-                " - Date: " + nouvelleReservation.getDateReservation() +
+                " - Date: " + dateReservation +
                 " - Heure de début: " + heureDebut);
+
+        Intent retourIntent = new Intent();
+        retourIntent.putParcelableArrayListExtra("ReservationListe", reservationListe); // Passer la liste
+        setResult(RESULT_OK, retourIntent);
+        finish();
 
         // Retourner à MainActivity avec les nouvelles places restantes
         /*Intent retourIntent = new Intent();

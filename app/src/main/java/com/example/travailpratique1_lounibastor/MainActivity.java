@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                     tv_placesRestantes.setTextColor(Color.GRAY);
                 }
                 tv_placesRestantes.setText(String.valueOf(restaurantSelectionne.getNbPlacesRestantes()) + " places restantes");
-                Toast.makeText(parent.getContext(),"Selection:   " + restaurantSelectionne,Toast.LENGTH_LONG).show();
             }
 
             @Override

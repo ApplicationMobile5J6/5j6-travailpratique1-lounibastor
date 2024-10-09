@@ -97,4 +97,6 @@ public class RestaurantActivity extends AppCompatActivity {
         adaptateur = new ReservationAdapt(this, filteredList);
         maListe.setAdapter(adaptateur);
     }
+
 }
+
