@@ -180,6 +180,7 @@ public class ReservationActivity extends AppCompatActivity {
         String dateReservation = et_date.getText().toString().trim();
         String heureDebut = spn_heureDebut.getSelectedItem().toString();
         String heureFin = et_heureFin.getText().toString();
+        String nomResto = tv_nomResto.getText().toString();
         int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
         int placesReservees = sb_placeRes.getProgress();
 
@@ -198,7 +199,7 @@ public class ReservationActivity extends AppCompatActivity {
             return;
         }
 
-        reservation nouvelleReservation = new reservation(nomPersonne, heureDebut, heureFin, placesReservees, dateReservation, telPersonne);
+        reservation nouvelleReservation = new reservation(nomResto, nomPersonne, heureDebut, heureFin, placesReservees, dateReservation, telPersonne);
         reservationListe.add(nouvelleReservation);
 
         int nouvellesPlacesRestantes = nbPlacesRestantes - placesReservees;

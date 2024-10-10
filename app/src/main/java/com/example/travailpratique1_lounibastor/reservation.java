@@ -5,22 +5,21 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.util.Date;
-
 public class reservation implements Parcelable {
     private static int compteur = 0;
-    private int noReservation, nbPlace;
+    private int noReservation, nbPlace; // Retirer noRestaurant
     private String dateReservation, blocReservationDebut, blocReservationFin, nomPersonne, telPersonne;
+    private String nomRestaurant; // Ajouter nomRestaurant
 
-    public reservation(String nomPersonne, String blocReservationDebut, String blocReservationFin, int nbPlace, String dateReservation, String telPersonne) {
+    public reservation(String nomRestaurant, String nomPersonne, String blocReservationDebut, String blocReservationFin, int nbPlace, String dateReservation, String telPersonne) {
         this.noReservation = ++compteur;
+        this.nomRestaurant = nomRestaurant;
         this.nomPersonne = nomPersonne;
         this.blocReservationDebut = blocReservationDebut;
         this.blocReservationFin = blocReservationFin;
         this.nbPlace = nbPlace;
         this.dateReservation = dateReservation;
         this.telPersonne = telPersonne;
-
     }
 
     protected reservation(Parcel in) {
@@ -31,6 +30,7 @@ public class reservation implements Parcelable {
         blocReservationFin = in.readString();
         nomPersonne = in.readString();
         telPersonne = in.readString();
+        nomRestaurant = in.readString(); // Lecture de nomRestaurant
     }
 
     public static final Creator<reservation> CREATOR = new Creator<reservation>() {
@@ -101,6 +101,13 @@ public class reservation implements Parcelable {
         this.telPersonne = telPersonne;
     }
 
+    public String getNomRestaurant() {
+        return nomRestaurant;
+    }
+
+    public void setNomRestaurant(String nomRestaurant) {
+        this.nomRestaurant = nomRestaurant;
+    }
 
     @Override
     public int describeContents() {
@@ -108,7 +115,7 @@ public class reservation implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
         parcel.writeInt(noReservation);
         parcel.writeInt(nbPlace);
         parcel.writeString(dateReservation);
@@ -116,5 +123,6 @@ public class reservation implements Parcelable {
         parcel.writeString(blocReservationFin);
         parcel.writeString(nomPersonne);
         parcel.writeString(telPersonne);
+        parcel.writeString(nomRestaurant);
     }
 }

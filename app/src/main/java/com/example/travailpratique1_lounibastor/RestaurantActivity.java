@@ -41,6 +41,13 @@ public class RestaurantActivity extends AppCompatActivity {
 
         reservationListe = troisiemeIntent.getParcelableArrayListExtra("ReservationListe");
 
+        List<reservation> filteredReservations = new ArrayList<>();
+        for (reservation res : reservationListe) {
+            if (res.getNomRestaurant().equals(nomResto)) {
+                filteredReservations.add(res);
+            }
+        }
+
         spn_date = findViewById(R.id.spn_date);
 
         Set<String> uniqueDates = new HashSet<>();

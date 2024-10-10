@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
@@ -126,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
     public void onClick_AfficherReservation(View view) {
         Intent monIntent = new Intent(MainActivity.this, RestaurantActivity.class);
         Bundle bReservation = new Bundle();
+        List<reservation> filteredReservations = new ArrayList<>();
+        for (reservation res : reservationListe) {
+            if (res.getNomRestaurant().equals(restaurantSelectionne.getNomRestaurant())) {
+                filteredReservations.add(res);
+            }
+        }
         bReservation.putParcelableArrayList("ARRAYLIST", listeRestaurants);
         bReservation.putParcelableArrayList("ReservationListe", reservationListe);
         monIntent.putExtras(bReservation);
