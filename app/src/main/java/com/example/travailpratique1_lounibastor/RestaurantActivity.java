@@ -76,8 +76,8 @@ public class RestaurantActivity extends AppCompatActivity {
 
         maListe.setOnItemClickListener((parent, view, position, id) -> {
             reservation selectedReservation = adaptateur.getItem(position);
-            String message = getString(R.string.num_res) + ": " + selectedReservation.getNoReservation() +
-                    ", " + getString(R.string.tel) + ": " + selectedReservation.getTelPersonne();
+            String message = getString(R.string.num_res) + " " + selectedReservation.getNoReservation() +
+                    ", " + getString(R.string.tel) + " " + selectedReservation.getTelPersonne();
             Toast.makeText(RestaurantActivity.this, message, Toast.LENGTH_SHORT).show();
         });
     }
