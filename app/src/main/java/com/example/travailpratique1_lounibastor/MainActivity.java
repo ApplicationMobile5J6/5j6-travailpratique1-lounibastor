@@ -3,6 +3,7 @@ package com.example.travailpratique1_lounibastor;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,12 +24,14 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final int REQUEST_CODE = 1;
     private Spinner spn_nomResto;
     private TextView tv_placesRestantes;
     ArrayList<restaurant> listeRestaurants= new ArrayList<>();
+    private ArrayList<reservation> reservationListe = new ArrayList<>();
     private restaurant restaurantSelectionne;
     private ActivityResultLauncher<Intent> activityResultLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         spn_nomResto = (Spinner) findViewById(R.id.spn_nomResto);
         tv_placesRestantes = (TextView) findViewById(R.id.tv_placesReserve);
 
-        ArrayList<restaurant> listeRestaurants= new ArrayList<>();
         listeRestaurants.add(new restaurant(1,"Bnine",15,15));
         listeRestaurants.add(new restaurant(2,"CHEZ RAMS",10,10));
         listeRestaurants.add(new restaurant(3,"McHalal",9,4));
@@ -64,9 +66,10 @@ public class MainActivity extends AppCompatActivity {
                     tv_placesRestantes.setTextColor(ContextCompat.getColor(MainActivity.this,
                             R.color.rouge));
                 } else{
-                    tv_placesRestantes.setTextColor(Color.GRAY);
+                    tv_placesRestantes.setTextColor(ContextCompat.getColor(MainActivity.this,
+                            R.color.gris));
                 }
-                tv_placesRestantes.setText(String.valueOf(restaurantSelectionne.getNbPlacesRestantes()) + " places restantes");
+                tv_placesRestantes.setText(String.valueOf(restaurantSelectionne.getNbPlacesRestantes()) + " " + getString(R.string.places_restantes));
             }
 
             @Override
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        // Initialisation du ActivityResultLauncher
+
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
@@ -82,18 +85,38 @@ public class MainActivity extends AppCompatActivity {
                     int nouvellesPlacesRestantes = data.getIntExtra("NouvellesPlacesRestantes", -1);
                     if (nouvellesPlacesRestantes != -1) {
                         restaurantSelectionne.setNbPlacesRestantes(nouvellesPlacesRestantes);
-                        tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
+                        tv_placesRestantes.setText(nouvellesPlacesRestantes + " " + getString(R.string.places_restantes));
+                    }
+                    ArrayList<reservation> nouvellesReservations = data.getParcelableArrayListExtra("ReservationListe");
+                    if (nouvellesReservations != null) {
+                        reservationListe = nouvellesReservations;
                     }
                 }
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                reservationListe = data.getParcelableArrayListExtra("ReservationListe");
+                int nouvellesPlacesRestantes = data.getIntExtra("NouvellesPlacesRestantes", -1);
+                if (nouvellesPlacesRestantes != -1) {
+                    restaurantSelectionne.setNbPlacesRestantes(nouvellesPlacesRestantes);
+                    tv_placesRestantes.setText(nouvellesPlacesRestantes + " " + getString(R.string.places_restantes));
+                }
+
+            }
+        }
+    }
 
     public void onClick_reserverTable(View view) {
         Intent monIntent =  new Intent(MainActivity.this, ReservationActivity.class);
         Bundle bReservation = new Bundle();
         bReservation.putParcelableArrayList("ARRAYLIST",listeRestaurants);
+        bReservation.putParcelableArrayList("ReservationListe", reservationListe);
         monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
         monIntent.putExtra("PlacesRestantes", String.valueOf(restaurantSelectionne.getNbPlacesRestantes()));
         monIntent.putExtras(bReservation);
@@ -101,12 +124,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick_AfficherReservation(View view) {
-        Intent monIntent =  new Intent(MainActivity.this, RestaurantActivity.class);
+        Intent monIntent = new Intent(MainActivity.this, RestaurantActivity.class);
         Bundle bReservation = new Bundle();
-        bReservation.putParcelableArrayList("ARRAYLIST",listeRestaurants);
+        bReservation.putParcelableArrayList("ARRAYLIST", listeRestaurants);
+        bReservation.putParcelableArrayList("ReservationListe", reservationListe);
+        monIntent.putExtras(bReservation);
         monIntent.putExtra("NomResto", restaurantSelectionne.getNomRestaurant());
         startActivity(monIntent);
-
     }
-
 }

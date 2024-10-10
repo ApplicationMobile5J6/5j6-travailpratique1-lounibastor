@@ -39,12 +39,9 @@ public class RestaurantActivity extends AppCompatActivity {
         String nomResto = troisiemeIntent.getStringExtra("NomResto");
         tv_nomRestor.setText(nomResto);
 
-        spn_date = findViewById(R.id.spn_date);
+        reservationListe = troisiemeIntent.getParcelableArrayListExtra("ReservationListe");
 
-        reservationListe.add(new reservation("Amine Re", "17h00", "22h00", 2, "2024-10-09", "0123456789"));
-        reservationListe.add(new reservation("Sarah L", "19h00", "21h00", 4, "2024-10-10", "0987654321"));
-        reservationListe.add(new reservation("Jean P", "18h00", "20h00", 3, "2024-10-09", "0555555555"));
-        reservationListe.add(new reservation("Jean P", "18h00", "20h00", 3, "2030-10-09", "0555555555"));
+        spn_date = findViewById(R.id.spn_date);
 
         Set<String> uniqueDates = new HashSet<>();
         for (reservation res : reservationListe) {
@@ -79,8 +76,8 @@ public class RestaurantActivity extends AppCompatActivity {
 
         maListe.setOnItemClickListener((parent, view, position, id) -> {
             reservation selectedReservation = adaptateur.getItem(position);
-            String message = "Numéro de réservation: " + selectedReservation.getNoReservation() +
-                    ", Téléphone: " + selectedReservation.getTelPersonne();
+            String message = getString(R.string.num_res) + ": " + selectedReservation.getNoReservation() +
+                    ", " + getString(R.string.tel) + ": " + selectedReservation.getTelPersonne();
             Toast.makeText(RestaurantActivity.this, message, Toast.LENGTH_SHORT).show();
         });
     }

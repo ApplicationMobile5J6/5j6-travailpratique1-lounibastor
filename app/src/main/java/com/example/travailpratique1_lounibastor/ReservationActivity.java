@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -51,6 +52,7 @@ public class ReservationActivity extends AppCompatActivity {
             return insets;
         });
 
+
         et_date = findViewById(R.id.et_date);
         tv_placesReserve = findViewById(R.id.tv_placesReserve);
         sb_placeRes = findViewById(R.id.sb_placesRes);
@@ -61,6 +63,18 @@ public class ReservationActivity extends AppCompatActivity {
         et_heureFin = findViewById(R.id.et_heureFin);
         et_nomPersonne = findViewById(R.id.et_nom);
         et_telPersonne =findViewById(R.id.et_numeroTel);
+
+        Intent intent = getIntent();
+        String placeRestante = intent.getStringExtra("PlacesRestantes");
+        String nomResto = intent.getStringExtra("NomResto");
+        reservationListe = intent.getParcelableArrayListExtra("ReservationListe");
+
+        if (reservationListe == null) {
+            reservationListe = new ArrayList<>();
+        }
+
+        tv_nomResto.setText(nomResto);
+        tv_placesRestantes.setText(placeRestante + " " + getString(R.string.places_restantes));
 
         ArrayList<String> listHeure = new ArrayList<>();
         listHeure.add("16:00");
@@ -109,21 +123,16 @@ public class ReservationActivity extends AppCompatActivity {
         sb_placeRes.setMax(10);
         sb_placeRes.setProgress(1);
 
-        tv_placesReserve.setText(sb_placeRes.getProgress() + " places reservées");
-        Intent intent = getIntent();
-        Bundle bReservation = intent.getExtras();
-        String nomResto = intent.getStringExtra("NomResto");
-        tv_nomResto.setText(nomResto);
-        String placeRestante = intent.getStringExtra("PlacesRestantes");
-        tv_placesRestantes.setText(placeRestante + " places restantes");
+        tv_placesReserve.setText(sb_placeRes.getProgress() + " " + getString(R.string.places_res));
 
         int nbPlacesRestantes = Integer.parseInt(placeRestante);
 
-// Vérifier si le nombre de places restantes est inférieur ou égal à 4
         if (nbPlacesRestantes <= 4) {
-            tv_placesRestantes.setTextColor(Color.RED); // Changer la couleur du texte en rouge
+            tv_placesRestantes.setTextColor(ContextCompat.getColor(ReservationActivity.this,
+                    R.color.rouge));
         } else {
-            tv_placesRestantes.setTextColor(Color.GRAY); // Optionnel : changer la couleur si supérieur à 4
+            tv_placesRestantes.setTextColor(ContextCompat.getColor(ReservationActivity.this,
+                    R.color.gris));
         }
 
 
@@ -132,7 +141,7 @@ public class ReservationActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
                 progression = progressValue;
-                tv_placesReserve.setText(progressValue + " places reservées" );
+                tv_placesReserve.setText(progressValue + " " + getString(R.string.places_res));
             }
 
             @Override
@@ -150,20 +159,17 @@ public class ReservationActivity extends AppCompatActivity {
         int heure = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
 
-        // Ajouter 1 heure et 30 minutes
         minute += 29;
         if (minute >= 60) {
             minute -= 60;
             heure++;
         }
-        heure += 1; // Ajouter 1 heure
+        heure += 1;
 
-        // Gérer l'heure au-delà de 23
         if (heure >= 24) {
             heure -= 24;
         }
 
-        // Formatage de l'heure de fin
         String formattedHeureFin = String.format(Locale.CANADA_FRENCH, "%02d:%02d", heure, minute);
         et_heureFin.setText(formattedHeureFin);
     }
@@ -177,28 +183,28 @@ public class ReservationActivity extends AppCompatActivity {
         int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
         int placesReservees = sb_placeRes.getProgress();
 
-        // Validation des champs
         if (nomPersonne.isEmpty() || telPersonne.isEmpty() || dateReservation.isEmpty() || heureDebut.isEmpty()) {
-            Toast.makeText(this, "Veuillez remplir tous les champs.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.valid_champs), Toast.LENGTH_LONG).show();
             return;
         }
 
-        // Vérification des places restantes
+        if (!telPersonne.matches("\\d{3}-\\d{3}-\\d{4}")) {
+            Toast.makeText(this, getString(R.string.valid_tel), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (placesReservees > nbPlacesRestantes) {
-            Toast.makeText(this, "Pas assez de places disponibles.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.valid_places), Toast.LENGTH_LONG).show();
             return;
         }
-        reservation nouvelleReservation = new reservation(nomPersonne, heureDebut, heureFin, placesReservees, dateReservation, telPersonne);
 
-        // Ajouter la réservation à la liste
+        reservation nouvelleReservation = new reservation(nomPersonne, heureDebut, heureFin, placesReservees, dateReservation, telPersonne);
         reservationListe.add(nouvelleReservation);
 
-        // Mettre à jour le nombre de places restantes
         int nouvellesPlacesRestantes = nbPlacesRestantes - placesReservees;
         tv_placesRestantes.setText(nouvellesPlacesRestantes + " places restantes");
 
-        // Afficher un message de confirmation
-        Toast.makeText(this, "Réservation sauvegardée.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.sauvegarde), Toast.LENGTH_LONG).show();
 
         et_nomPersonne.setText("");
         et_telPersonne.setText("");
@@ -206,33 +212,26 @@ public class ReservationActivity extends AppCompatActivity {
         sb_placeRes.setProgress(1);
 
         Log.d("Reservation", "Réservation #" + nouvelleReservation.getNoReservation() +
-                " - Places: " + placesReservees +
+                " - Place(s): " + placesReservees +
                 " - Date: " + dateReservation +
                 " - Heure de début: " + heureDebut);
 
         Intent retourIntent = new Intent();
-        retourIntent.putParcelableArrayListExtra("ReservationListe", reservationListe); // Passer la liste
-        setResult(RESULT_OK, retourIntent);
-        finish();
-
-        // Retourner à MainActivity avec les nouvelles places restantes
-        /*Intent retourIntent = new Intent();
+        retourIntent.putParcelableArrayListExtra("ReservationListe", reservationListe);
         retourIntent.putExtra("NouvellesPlacesRestantes", nouvellesPlacesRestantes);
         setResult(RESULT_OK, retourIntent);
-        finish();*/
+        finish();
+    }
 
-    }@Override
+    @Override
     public void onBackPressed() {
-        // Récupérer le nombre de places restantes après la réservation
         super.onBackPressed();
         int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
 
-        // Retourner à MainActivity avec les nouvelles places restantes
         Intent retourIntent = new Intent();
         retourIntent.putExtra("NouvellesPlacesRestantes", nbPlacesRestantes);
         setResult(RESULT_OK, retourIntent);
 
-        // Appeler finish() pour fermer l'activité et revenir à la précédente
         finish();
     }
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Travail Pratique 1 - Louni, Bastor</string>
+    <string name="reserver_une_table">RÉSERVER UNE TABLE</string>
+    <string name="afficher_les_reservations">AFFICHER LES RÉSERVATIONS</string>
+    <string name="titre_page_1">Réservation de places au restaurant :</string>
+    <string name="selectionnez_la_date">Sélectionnez la date</string>
+    <string name="nom_personne">Nom de la personne</string>
+    <string name="num_tel">Numéro de téléphone</string>
+    <string name="res_la_table">RÉSERVER LA TABLE</string>
+    <string name="titre_page_2">Affichage des réservations</string>
+    <string name="select_date">Sélectionner une date</string>
+    <string name="places_restantes">places restantes</string>
+    <string name="places_res">places reservées</string>
+    <string name="num_res">Numéro de réservation:</string>
+    <string name="tel">Téléphone:</string>
+    <string name="valid_champs">Veuillez remplir tous les champs.</string>
+    <string name="valid_tel">Format du numéro de téléphone invalide. Utilisez le format 999-999-9999.</string>
+    <string name="valid_places">Pas assez de places disponibles.</string>
+    <string name="sauvegarde">Réservation sauvegardée</string>
+</resources>

@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:onClick="onClick_reserverTable"
-            android:text="RÉSERVER UNE TABLE"
+            android:text="@string/reserver_une_table"
             android:textSize="20sp" />
 
         <Button
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick_AfficherReservation"
-            android:text="AFFICHER LES RÉSERVATIONS"
+            android:text="@string/afficher_les_reservations"
             android:textSize="20sp" />
     </LinearLayout>
 

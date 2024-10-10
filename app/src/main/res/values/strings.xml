@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">Travail Pratique 1 - Louni, Bastor</string>
+    <string name="app_name">Practical Work 1 - Louni, Bastor</string>
+    <string name="reserver_une_table">RESERVE A TABLE</string>
+    <string name="afficher_les_reservations">DISPLAY RESERVATIONS</string>
+    <string name="titre_page_1">Reservation of seats at the restaurant :</string>
+    <string name="selectionnez_la_date">Select the date</string>
+    <string name="nom_personne">Name of the person</string>
+    <string name="num_tel">Phone number</string>
+    <string name="res_la_table">RESERVE THE TABLE</string>
+    <string name="titre_page_2">Display reservations</string>
+    <string name="select_date">Select a date</string>
+    <string name="places_restantes">remaining seats</string>
+    <string name="places_res">reserved seats</string>
+    <string name="num_res">Reservation number:</string>
+    <string name="tel">Phone:</string>
+    <string name="valid_champs">Please fill in all fields.</string>
+    <string name="valid_tel">Invalid phone number format. Please use the format 999-999-9999.</string>
+    <string name="valid_places">Not enough available seats.</string>
+    <string name="sauvegarde">Reservation saved.</string>
 </resources>
