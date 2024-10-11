@@ -223,17 +223,4 @@ public class ReservationActivity extends AppCompatActivity {
         setResult(RESULT_OK, retourIntent);
         finish();
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        int nbPlacesRestantes = Integer.parseInt(tv_placesRestantes.getText().toString().split(" ")[0]);
-
-        Intent retourIntent = new Intent();
-        retourIntent.putExtra("NouvellesPlacesRestantes", nbPlacesRestantes);
-        setResult(RESULT_OK, retourIntent);
-
-        finish();
-    }
-
 }

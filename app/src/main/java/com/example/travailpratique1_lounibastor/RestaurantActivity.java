@@ -2,6 +2,7 @@ package com.example.travailpratique1_lounibastor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -48,6 +49,17 @@ public class RestaurantActivity extends AppCompatActivity {
             }
         }
 
+        Log.d("RestaurantActivity", "Liste des réservations :");
+        for (reservation res : reservationListe) {
+            Log.d("RestaurantActivity", "Nom: " + res.getNomPersonne() +
+                    ", Restaurant: " + res.getNomRestaurant() +
+                    ", Date: " + res.getDateReservation() +
+                    ", Places: " + res.getNbPlace() +
+                    ", Téléphone: " + res.getTelPersonne() +
+                    ", Heure Début: " + res.getBlocReservationDebut() +
+                    ", Heure Fin: " + res.getBlocReservationFin());
+        }
+
         spn_date = findViewById(R.id.spn_date);
 
         Set<String> uniqueDates = new HashSet<>();
@@ -64,7 +76,7 @@ public class RestaurantActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedDate = (String) parent.getItemAtPosition(position);
-                filterReservationsByDate(selectedDate);
+                filterReservationsByDate(selectedDate, filteredReservations);
             }
 
             @Override
@@ -78,7 +90,7 @@ public class RestaurantActivity extends AppCompatActivity {
         });
 
         maListe = findViewById(R.id.lv_Reservations);
-        adaptateur = new ReservationAdapt(this, reservationListe);
+        adaptateur = new ReservationAdapt(this, filteredReservations);
         maListe.setAdapter(adaptateur);
 
         maListe.setOnItemClickListener((parent, view, position, id) -> {
@@ -89,10 +101,10 @@ public class RestaurantActivity extends AppCompatActivity {
         });
     }
 
-    private void filterReservationsByDate(String date) {
+    private void filterReservationsByDate(String date, List<reservation> filteredReservations) { // Ajouter le paramètre
         List<reservation> filteredList = new ArrayList<>();
 
-        for (reservation res : reservationListe) {
+        for (reservation res : filteredReservations) {
             if (res.getDateReservation().equals(date)) {
                 filteredList.add(res);
             }
@@ -101,6 +113,5 @@ public class RestaurantActivity extends AppCompatActivity {
         adaptateur = new ReservationAdapt(this, filteredList);
         maListe.setAdapter(adaptateur);
     }
-
 }
 
