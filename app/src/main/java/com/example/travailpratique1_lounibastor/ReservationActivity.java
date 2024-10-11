@@ -88,7 +88,7 @@ public class ReservationActivity extends AppCompatActivity {
         adaptateur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn_heureDebut.setAdapter(adaptateur);
         et_date.setInputType(InputType.TYPE_NULL);
-        dateFormater = new SimpleDateFormat("yyyy-MM--dd", Locale.CANADA_FRENCH);
+        dateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA_FRENCH);
 
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override

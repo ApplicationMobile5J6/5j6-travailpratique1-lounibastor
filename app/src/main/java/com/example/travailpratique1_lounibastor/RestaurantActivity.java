@@ -49,17 +49,6 @@ public class RestaurantActivity extends AppCompatActivity {
             }
         }
 
-        Log.d("RestaurantActivity", "Liste des réservations :");
-        for (reservation res : reservationListe) {
-            Log.d("RestaurantActivity", "Nom: " + res.getNomPersonne() +
-                    ", Restaurant: " + res.getNomRestaurant() +
-                    ", Date: " + res.getDateReservation() +
-                    ", Places: " + res.getNbPlace() +
-                    ", Téléphone: " + res.getTelPersonne() +
-                    ", Heure Début: " + res.getBlocReservationDebut() +
-                    ", Heure Fin: " + res.getBlocReservationFin());
-        }
-
         spn_date = findViewById(R.id.spn_date);
 
         Set<String> uniqueDates = new HashSet<>();
